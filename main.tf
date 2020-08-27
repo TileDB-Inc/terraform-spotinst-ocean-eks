@@ -109,11 +109,11 @@ module "vpc" {
   version = "2.29.0"
 
   name               = local.cluster_name
-  cidr               = "10.0.0.0/16"
+  cidr               = var.vpc_cidr
   azs                = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1], data.aws_availability_zones.available.names[2]]
-  private_subnets    = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  public_subnets     = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
-  enable_nat_gateway = true
+  private_subnets    = var.vpc_private_subnets
+  public_subnets     = var.vpc_public_subnets
+  enable_nat_gateway = var.enable_nat_gateway
   single_nat_gateway = true
   tags = merge(
     local.tags,
@@ -129,7 +129,7 @@ module "eks" {
 
   cluster_name    = local.cluster_name
   cluster_version = var.cluster_version
-  subnets         = module.vpc.private_subnets
+  subnets         = var.use_private_subnets == true ? module.vpc.private_subnets : module.vpc.public_subnets
   tags            = local.tags
   vpc_id          = module.vpc.vpc_id
   map_roles = [

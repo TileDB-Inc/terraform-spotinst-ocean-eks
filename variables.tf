@@ -62,3 +62,33 @@ variable "associate_public_ip_address" {
   description = "Associate a public IP address to worker nodes"
   default     = false
 }
+
+variable "vpc_cidr" {
+  type        = string
+  description = "The CIDR for vpc to be created"
+  default     = "10.0.0.0/16"
+}
+
+variable "vpc_private_subnets" {
+  type        = list
+  description = "Private subnets to use for VPC"
+  default     = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+}
+
+variable "vpc_public_subnets" {
+  type        = list
+  description = "Public subnets to use for VPC"
+  default     = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
+}
+
+variable "use_private_subnets" {
+  type        = bool
+  description = "Use private subnets for eks worker nodes"
+  default     = true
+}
+
+variable "enable_nat_gateway" {
+  type        = bool
+  description = "Enable nat gateway for private subnet access"
+  default     = true
+}
